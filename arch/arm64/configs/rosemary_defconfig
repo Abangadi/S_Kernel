@@ -420,7 +420,7 @@ CONFIG_PRINTK_TIME=y
 #The user version requires removing the debug function and improving performance
 CONFIG_DYNAMIC_DEBUG=n
 # CONFIG_DEBUG_INFO is not set
-CONFIG_FRAME_WARN=2800
+CONFIG_FRAME_WARN=0
 # CONFIG_PANIC_ON_OOPS is not set
 CONFIG_PANIC_TIMEOUT=1
 CONFIG_SCHEDSTATS=y
