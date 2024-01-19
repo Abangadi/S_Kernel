@@ -54,7 +54,7 @@ module_param_named(debug_mask, debug, uint, 0644);
 #define dprintk(msg...)		\
 do { 				\
 	if (debug)		\
-		pr_info(msg);	\
+		pr_debug(msg);	\
 } while (0)
 
 struct workqueue_struct *suspend_work_queue;
