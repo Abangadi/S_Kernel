@@ -13,7 +13,6 @@
 #include <linux/arm-smccc.h>
 #include <mt-plat/mtk_secure_api.h>
 #include <mt-plat/devapc_public.h>
-#include <mt-plat/aee.h>
 #include "devapc-mtk-common.h"
 
 struct mtk_devapc_context {
@@ -335,20 +334,6 @@ static void devapc_violation_triggered(uint32_t vio_idx,
 		/* Connsys will trigger EE instead of AP KE */
 		if (id != INFRA_SUBSYS_CONN)
 			BUG();
-	} else if (dbg_stat->enable_AEE) {
-
-		/* call mtk aee_kernel_exception */
-		aee_kernel_exception("[DEVAPC]",
-				"%s %s %s %s, Vio Addr: 0x%x\n%s%s\n",
-				"Violation Master:",
-				vio_master,
-				"Access Violation Slave:",
-				device_info[vio_idx].device,
-				vio_addr,
-				"CRDISPATCH_KEY:Device APC Violation Issue/",
-				subsys_str
-				);
-
 	}
 
 	/* unmask irq for module index "vio_idx" */
@@ -1037,7 +1022,6 @@ ssize_t mtk_devapc_dbg_read(struct file *file, char __user *buffer,
 	devapc_log("DEVAPC debug status:\n");
 	devapc_log("\tenable_ut = %d\n", dbg_stat->enable_ut);
 	devapc_log("\tenable_KE = %d\n", dbg_stat->enable_KE);
-	devapc_log("\tenable_AEE = %d\n", dbg_stat->enable_AEE);
 	devapc_log("\tenable_dapc = %d\n", dbg_stat->enable_dapc);
 	devapc_log("\n");
 
@@ -1100,12 +1084,6 @@ ssize_t mtk_devapc_dbg_write(struct file *file, const char __user *buffer,
 		dbg_stat->enable_KE = (param != 0);
 		DEVAPC_MSG("debapc_dbg_stat->enable_KE = %s\n",
 			dbg_stat->enable_KE ? "enable" : "disable");
-		return count;
-
-	} else if (!strncmp(cmd_str, "enable_AEE", sizeof("enable_AEE"))) {
-		dbg_stat->enable_AEE = (param != 0);
-		DEVAPC_MSG("debapc_dbg_stat->enable_AEE = %s\n",
-			dbg_stat->enable_AEE ? "enable" : "disable");
 		return count;
 
 	} else if (!strncmp(cmd_str, "enable_dapc", sizeof("enable_dapc"))) {
